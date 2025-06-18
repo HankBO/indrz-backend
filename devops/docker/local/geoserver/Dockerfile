@@ -1,4 +1,4 @@
-FROM docker.io/kartoza/geoserver:2.25.6
+FROM docker.io/kartoza/geoserver:2.25.4
 ENV GEOSERVER_LIB_DIR=$CATALINA_HOME/webapps/geoserver/WEB-INF/lib/
 
 
