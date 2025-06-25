@@ -3,13 +3,18 @@ ENV GEOSERVER_LIB_DIR=$CATALINA_HOME/webapps/geoserver/WEB-INF/lib/
 
 
 # Copy fonts and map icon images
-COPY devops/docker/local/geoserver/fonts/*.ttf /usr/share/fonts/truetype/
+#COPY devops/docker/local/geoserver/fonts/*.ttf /usr/share/fonts/truetype/
 COPY devops/docker/local/geoserver/fonts/ /opt/
-COPY devops/docker/local/geoserver/icons/*.png /opt/geoserver/data_dir/workspaces/indrz/styles/.
-COPY devops/docker/local/geoserver/icons/*.png /opt/geoserver/data_dir/styles/.
+COPY devops/docker/local/geoserver/icons/*.png /opt/geoserver/data_dir/workspaces/indrz/styles/
+COPY devops/docker/local/geoserver/icons/*.png /opt/geoserver/data_dir/styles/
 
 #
 WORKDIR /tmp
+
+# install geoserver-2.25.x-SNAPSHOT-backup-restore-plugin.zip
+RUN wget -q https://build.geoserver.org/geoserver/2.25.x/community-latest/geoserver-2.25-SNAPSHOT-backup-restore-plugin.zip && \
+    unzip -o -q geoserver-2.25-SNAPSHOT-backup-restore-plugin.zip -d $GEOSERVER_LIB_DIR && \
+    rm geoserver-2.25-SNAPSHOT-backup-restore-plugin.zip
 
 # install java advanced imaging
 RUN wget -q https://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz && \
