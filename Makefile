@@ -51,3 +51,5 @@ load-data-dev: ## load data
 	docker exec -t indrz_api python3 manage.py loaddata --app poi_manager initial_poi_categories.json
 	docker exec -t indrz_api python3 manage.py loaddata --app poi_manager initial_poi.json
 
+create-admin-user: ## Create admin user
+	docker exec -it indrz_api python3 manage.py admin_user_exists
