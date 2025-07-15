@@ -11,7 +11,7 @@ from geojson import Feature, FeatureCollection, Point
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from buildings.models import Campus, Building, BuildingFloorSpace, BuildingFloor
+from buildings.models import Campus, Building, BuildingFloorSpace, BuildingFloor, IndoorFingerprint
 from buildings.serializers import (BuildingSerializer,
                                    BuildingFloorSpaceSerializer,
                                    BuildingFloorGeomSerializer,
@@ -19,6 +19,7 @@ from buildings.serializers import (BuildingSerializer,
                                    FloorSerializer
 
                                    )
+from util import util
 
 logger = logging.getLogger(__name__)
 
@@ -283,3 +284,34 @@ def get_space_by_roomcode(request, roomcode):
                 return Response(serializer.data)
         except:
             return Response("no data found", status=404)
+
+@api_view(['POST'])
+def get_positioning_coordinate(request, format=None):
+    """
+    Get the positioning coordinate based on fingerprint similarity
+    query all fignerprint to compare simiarity based on nearest neighbour algorithm
+    return the best match room_external_id and get the centroid of the room
+    """
+    if request.method == 'POST':
+        fingerprint = request.data.get('networks', None) # array: [bssid, rssi]
+        print(fingerprint)
+        if not fingerprint:
+            return Response({"error": "No fingerprint provided"}, status=400)
+
+        # Here you would implement your logic to find the best matching room
+        # based on the fingerprint. This is a placeholder for that logic.
+        # best_match = IndoorFingerprint.objects.filter(room_external_id=fingerprint).first()
+
+        # if not best_match:
+        #     return Response({"error": "No matching room found"}, status=404)
+
+        # centroid = best_match.geom.centroid
+        response_data = {
+            "room_external_id": "A01.C",
+            "centroid": {
+                "type": "Point",
+                "coordinates": [10, 20]
+            }
+        }
+
+        return Response(response_data)

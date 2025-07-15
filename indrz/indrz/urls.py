@@ -11,6 +11,7 @@ from rest_framework import permissions
 
 from api.search import search_any
 from users.views import CustomAuthToken
+from buildings import views
 from .routers import router
 
 ##############################################
@@ -55,6 +56,7 @@ urlpatterns += [
 
 urlpatterns += [
     # ... the rest of your URLconf goes here ...
+    path('api/v1/positioning', views.get_positioning_coordinate, name='get_positioning_coordinate'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
