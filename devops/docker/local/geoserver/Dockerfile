@@ -1,12 +1,12 @@
-FROM docker.io/kartoza/geoserver:2.25.6
+FROM docker.io/kartoza/geoserver:2.25.4
 ENV GEOSERVER_LIB_DIR=$CATALINA_HOME/webapps/geoserver/WEB-INF/lib/
 
 
 # Copy fonts and map icon images
-COPY devops/docker/local/geoserver/fonts/*.ttf /usr/share/fonts/truetype/
+#COPY devops/docker/local/geoserver/fonts/*.ttf /usr/share/fonts/truetype/
 COPY devops/docker/local/geoserver/fonts/ /opt/
-COPY devops/docker/local/geoserver/icons/*.png /opt/geoserver/data_dir/workspaces/indrz/styles/.
-COPY devops/docker/local/geoserver/icons/*.png /opt/geoserver/data_dir/styles/.
+COPY devops/docker/local/geoserver/icons/*.png /opt/geoserver/data_dir/workspaces/indrz/styles/
+COPY devops/docker/local/geoserver/icons/*.png /opt/geoserver/data_dir/styles/
 
 #
 WORKDIR /tmp

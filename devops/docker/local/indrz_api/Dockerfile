@@ -81,8 +81,8 @@ WORKDIR /app
 COPY --from=builder /opt/venv /opt/venv
 
 # Copy application code
-COPY --chown=django:django indrz/ /app/
-COPY --chown=django:django devops/docker/local/indrz_api/entrypoint.sh /entrypoint.sh
+COPY indrz/ /app/
+COPY devops/docker/local/indrz_api/entrypoint.sh /entrypoint.sh
 
 # Set entrypoint permissions
 RUN chmod +x /entrypoint.sh

@@ -1,0 +1,1 @@
+[{"model":"buildings.building","pk":1,"fields":{"building_name":"Building Z","description":null,"num_floors":2,"geom":"SRID=3857;POINT (1587955.3758323 5879669.9796768)","fk_organization":1,"fk_campus":1}}]

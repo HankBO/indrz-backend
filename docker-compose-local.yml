@@ -81,6 +81,7 @@ services:
     build:
       context: ../indrz-frontend
       dockerfile: ./devops/docker/local/frontend/Dockerfile
+      #dockerfile: ./devops/docker/production/nginx/Dockerfile
     container_name: frontend
     image: indrz-os/frontend:latest
     restart: always
