@@ -373,3 +373,21 @@ class Wing(FloorSpaceBase):
 
     def __str__(self):
         return self.abbreviation or ''
+
+class IndoorFingerprint(gis_models.Model):
+    """
+    Represents a indoor fingerprint for a specific location.
+    This is used for indoor positioning and navigation.
+    Fields: bssid, fp_id, room_external_id, site_id, rssi, floor_num, geom, 
+    """
+    bssid = gis_models.CharField(verbose_name=_("BSSID"), max_length=17, null=True, blank=True,
+                                 validators=[RegexValidator(regex=r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$',
+                                                            message=_("Enter a valid MAC address."))])
+    fp_id = gis_models.IntegerField(verbose_name=_("Fingerprint ID"), max_length=150, null=True, blank=True)
+    room_external_id = gis_models.CharField(verbose_name=_("Room external ID"), max_length=150, null=True, blank=True)
+    site_id = gis_models.CharField(verbose_name=_("Site ID"), max_length=150, null=True, blank=True)
+    rssi = gis_models.FloatField(verbose_name=_("Received Signal Strength Indicator"), null=True, blank=True)
+    floor_num = gis_models.FloatField(verbose_name=_("Floor number"), null=True, blank=True)
+
+    class Meta:
+        ordering = ['fp_id', 'bssid']

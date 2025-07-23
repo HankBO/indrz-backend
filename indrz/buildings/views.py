@@ -19,7 +19,8 @@ from buildings.serializers import (BuildingSerializer,
                                    FloorSerializer
 
                                    )
-from util import util
+import pandas as pd
+import buildings.utils as utils
 
 logger = logging.getLogger(__name__)
 
@@ -294,24 +295,35 @@ def get_positioning_coordinate(request, format=None):
     """
     if request.method == 'POST':
         fingerprint = request.data.get('networks', None) # array: [bssid, rssi]
-        print(fingerprint)
+        fp_input_df = pd.DataFrame(fingerprint)
+        # print(fp_input_df.head())
         if not fingerprint:
             return Response({"error": "No fingerprint provided"}, status=400)
 
+        fingerprint_dataset = pd.DataFrame(list(IndoorFingerprint.objects.all().values()))
+        # print(fingerprint_dataset.head())
+        
         # Here you would implement your logic to find the best matching room
         # based on the fingerprint. This is a placeholder for that logic.
-        # best_match = IndoorFingerprint.objects.filter(room_external_id=fingerprint).first()
+        estimated_room_external_id, best_similarity = utils.room_estimation(fp_input_df, fingerprint_dataset)
+        
+        if best_similarity < 0.01:
+            return Response({"error": "No matching room found"}, status=404)
+        else:
+            best_match = BuildingFloorSpace.objects.filter(room_external_id=estimated_room_external_id).first()
+            if not best_match:
+                return Response({"error": "No matching room found"}, status=404)
+            # print(best_match)
+            centroid = best_match.centerGeometry
+            # print(centroid)
 
-        # if not best_match:
-        #     return Response({"error": "No matching room found"}, status=404)
-
-        # centroid = best_match.geom.centroid
-        response_data = {
-            "room_external_id": "A01.C",
-            "centroid": {
-                "type": "Point",
-                "coordinates": [10, 20]
+            response_data = {
+                "is_success": True,
+                "room_external_id": estimated_room_external_id,
+                "centroid": {
+                    "type": "Point",
+                    "coordinates": [centroid.x, centroid.y]
+                }
             }
-        }
 
         return Response(response_data)
